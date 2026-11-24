@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>TSL Captain Squad Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0b1e3c;
+  --navy-2:#12294d;
+  --gold:#c39a26;
+  --gold-bright:#e5bb45;
+  --green:#00693e;
+  --green-bright:#059669;
+  --red:#dc2626;
+  --amber:#d97706;
+  --bg:#f2f5f9;
+  --surface:#ffffff;
+  --surface-2:#f8fafc;
+  --line:#e2e8f0;
+  --text:#0f172a;
+  --muted:#64748b;
+  --radius:14px;
+  --shadow:0 1px 3px rgba(11,30,60,.06),0 6px 18px rgba(11,30,60,.04);
+  --shadow-lg:0 14px 36px rgba(11,30,60,.14);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:15px/1.45 'Outfit',system-ui,Arial,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0;border-radius:10px;font-weight:600;transition:transform .08s ease,background .15s ease,box-shadow .15s ease,opacity .15s ease}
+button:active:not(:disabled){transform:scale(.97)}
+button:disabled{opacity:.45;cursor:not-allowed}
+input,select{width:100%;padding:11px 13px;border:1.5px solid #cbd5e1;border-radius:10px;background:#fff;color:var(--text);outline:none;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(11,30,60,.1)}
+a{color:inherit}
+[hidden]{display:none!important}
+.num{font-variant-numeric:tabular-nums}
+
+/* Top Bar */
+.topbar{
+  position:sticky;top:0;z-index:25;
+  background:linear-gradient(90deg,var(--navy) 0%,#08162c 100%);
+  color:#fff;border-bottom:3px solid var(--gold);
+  box-shadow:0 4px 16px rgba(11,30,60,.16);
+}
+.topbar-inner{
+  max-width:980px;margin:0 auto;padding:12px 18px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none}
+.brand img{width:40px;height:44px;object-fit:contain;background:#fff;border-radius:9px;padding:2px;flex-shrink:0}
+.brand b{display:block;font-size:15px;line-height:1.1;letter-spacing:.02em}
+.brand small{display:block;font-size:10px;letter-spacing:.15em;color:var(--gold-bright);text-transform:uppercase;margin-top:2px}
+.top-actions{display:flex;align-items:center;gap:8px}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#10b981;display:inline-block}
+.sync-dot.err{background:#ef4444}
+.top-btn{
+  background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.18);
+  padding:7px 12px;font-size:12.5px;border-radius:9px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;
+}
+.top-btn:hover{background:rgba(255,255,255,.18)}
+
+/* Main Container */
+.wrap{max-width:980px;margin:0 auto;padding:22px 18px 64px}
+
+/* Access Gate */
+.gate-wrap{
+  min-height:calc(100vh - 76px);
+  display:grid;place-items:center;padding:24px 16px;
+}
+.gate{
+  width:min(440px,100%);background:#fff;border:1px solid var(--line);
+  border-radius:20px;padding:34px 28px 28px;text-align:center;
+  box-shadow:var(--shadow-lg);position:relative;overflow:hidden;
+}
+.gate::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:5px;
+  background:linear-gradient(90deg,var(--green),var(--gold),var(--navy));
+}
+.gate img{width:76px;height:84px;object-fit:contain;margin-bottom:12px}
+.gate .eyebrow{
+  display:inline-block;font-size:11px;font-weight:800;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:6px;
+}
+.gate h1{margin:0 0 8px;font-size:26px;letter-spacing:-.02em;color:var(--navy)}
+.gate p{margin:0 0 22px;color:var(--muted);font-size:14px}
+.code-input{
+  text-align:center;font-size:26px;font-weight:800;letter-spacing:.28em;
+  padding:14px 16px;border-radius:12px;border:2px solid #cbd5e1;
+  color:var(--navy);background:#f8fafc;
+}
+.code-input:focus{background:#fff;border-color:var(--navy)}
+.code-input::placeholder{letter-spacing:.08em;font-size:15px;font-weight:500;color:#94a3b8}
+.gate-err{
+  margin-top:12px;padding:10px 12px;border-radius:10px;
+  background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;
+  font-size:13px;font-weight:600;text-align:left;
+}
+.gate-foot{
+  margin-top:20px;padding-top:16px;border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.gate-foot a{color:var(--navy);font-weight:600;text-decoration:none}
+.gate-foot a:hover{text-decoration:underline}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 16px;font-size:14px}
+.btn-primary{background:var(--green);color:#fff}
+.btn-primary:hover:not(:disabled){background:#005632}
+.btn-navy{background:var(--navy);color:#fff}
+.btn-navy:hover:not(:disabled){background:var(--navy-2)}
+.btn-gold{background:var(--gold);color:var(--navy);font-weight:700}
+.btn-gold:hover:not(:disabled){background:var(--gold-bright)}
+.btn-ghost{background:#eef2f7;color:var(--navy)}
+.btn-ghost:hover:not(:disabled){background:#e2e8f0}
+.btn-danger{background:#fee2e2;color:#b91c1c}
+.btn-danger:hover:not(:disabled){background:#fecaca}
+.btn-sm{padding:6px 11px;font-size:12.5px;border-radius:8px}
+
+/* Club Hero */
+.club-hero{
+  background:linear-gradient(135deg,var(--club,var(--navy)) 0%,var(--navy) 75%);
+  color:#fff;border-radius:18px;padding:22px 24px;
+  border-bottom:4px solid var(--club-a,var(--gold));
+  box-shadow:var(--shadow-lg);margin-bottom:18px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.club-hero-left{display:flex;align-items:center;gap:16px}
+.club-hero svg{width:64px;height:72px;flex-shrink:0;filter:drop-shadow(0 8px 16px rgba(0,0,0,.35))}
+.club-hero .eyebrow{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-bright);display:block;margin-bottom:4px}
+.club-hero h1{margin:0 0 4px;font-size:clamp(22px,4vw,32px);line-height:1.08;letter-spacing:-.02em}
+.club-hero p{margin:0;color:rgba(255,255,255,.82);font-size:13.5px}
+.club-hero-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:99px;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.badge.open{background:#dcfce7;color:#15803d}
+.badge.open::before{content:'';width:7px;height:7px;border-radius:50%;background:#16a34a}
+.badge.locked{background:#fef3c7;color:#92400e}
+.badge.archived{background:#f1f5f9;color:#64748b}
+
+/* Lock Banner */
+.lock-banner{
+  background:#fffbeb;border:1px solid #fde68a;color:#92400e;
+  border-radius:13px;padding:13px 16px;margin-bottom:18px;
+  font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:10px;
+}
+
+/* Position Summary Strip */
+.pos-strip{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px;
+}
+.pos-tile{
+  background:#fff;border:1px solid var(--line);border-radius:13px;
+  padding:12px 14px;box-shadow:var(--shadow);text-align:center;
+}
+.pos-tile span{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.pos-tile strong{display:block;font-size:24px;font-weight:800;color:var(--navy);margin-top:2px}
+.pos-tile.total{border-color:var(--gold);background:linear-gradient(180deg,#fffdf5,#fff)}
+
+/* Cards & Forms */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:18px}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.card-head h2{margin:0;font-size:18px;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:13px;margin:0}
+
+.add-grid{display:grid;grid-template-columns:1.8fr .8fr 1.2fr;gap:12px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-grid .full,.add-grid .full{grid-column:1/-1}
+label.field{display:grid;gap:5px;font-size:12.5px;font-weight:600;color:var(--muted)}
+.field-hint{font-size:12px;margin-top:2px;font-weight:600}
+.field-hint.warn{color:#b91c1c}
+.field-hint.ok{color:#059669}
+
+.taken-bar{
+  margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--muted);
+}
+.num-chip{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:26px;height:24px;padding:0 6px;border-radius:6px;
+  background:#eef2f7;color:var(--navy);font-weight:700;font-size:11.5px;
+}
+.num-chip.arch{background:#fef2f2;color:#b91c1c;text-decoration:line-through}
+
+/* Roster Table */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px;white-space:nowrap}
+th{background:var(--surface-2);color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:11px 10px;text-align:center;border-bottom:1px solid var(--line)}
+td{padding:11px 10px;border-bottom:1px solid #f1f5f9;text-align:center}
+th.left,td.left{text-align:left}
+.jersey{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:9px;font-weight:800;font-size:13.5px;color:#fff}
+.pos-pill{display:inline-block;padding:3px 9px;border-radius:99px;font-size:12px;font-weight:600;background:#f1f5f9;color:var(--navy)}
+
+/* Modal */
+dialog.modal{border:0;border-radius:16px;width:min(480px,94vw);padding:0;box-shadow:var(--shadow-lg);color:var(--text);overflow:hidden}
+dialog.modal::backdrop{background:rgba(8,22,44,.65);backdrop-filter:blur(3px)}
+.modal-head{background:var(--navy);color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+.modal-head h3{margin:0;font-size:17px}
+.modal-body{padding:20px}
+.modal-foot{padding:14px 20px;background:var(--surface-2);border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px}
+
+/* Toasts */
+#toasts{position:fixed;bottom:20px;right:20px;z-index:90;display:grid;gap:8px;max-width:360px;pointer-events:none}
+.toast{pointer-events:auto;padding:12px 15px;border-radius:12px;color:#fff;font-size:13.5px;font-weight:600;box-shadow:var(--shadow-lg);animation:slideIn .2s ease}
+.toast.ok{background:#065f46;border-left:4px solid #34d399}
+.toast.err{background:#991b1b;border-left:4px solid #f87171}
+.toast.info{background:var(--navy);border-left:4px solid var(--gold-bright)}
+@keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+@media(max-width:720px){
+  .add-grid,.form-grid{grid-template-columns:1fr}
+  .pos-strip{grid-template-columns:repeat(3,1fr)}
+  .pos-tile.total{grid-column:1/-1}
+  .club-hero-right{align-items:flex-start}
+  #toasts{bottom:14px;right:12px;left:12px;max-width:none}
+}
+@media(max-width:460px){
+  .topbar-inner{padding:10px 14px}
+  .wrap{padding:16px 12px 54px}
+  .card{padding:16px}
+  .club-hero{padding:18px 16px}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="/">
+      <img src="/logo.jpg" alt="TSL">
+      <div><b>TRADEMORE SUPER LEAGUE</b><small>Captain Squad Portal</small></div>
+    </a>
+    <div class="top-actions">
+      <span id="syncWrap" hidden style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#cbd5e1">
+        <span class="sync-dot" id="syncDot"></span>
+      </span>
+      <a href="/" class="top-btn" target="_blank" rel="noopener">Public Site ↗</a>
+      <button type="button" class="top-btn" id="signOutBtn" hidden>Switch Team</button>
+    </div>
+  </div>
+</header>
+
+<main id="gateView" class="gate-wrap">
+  <div class="gate">
+    <img src="/logo.jpg" alt="Trademore Super League">
+    <span class="eyebrow">2026 Season · Squad Enrolment</span>
+    <h1>Captain Access</h1>
+    <p>Enter your club's authorization code to register and manage your team's players.</p>
+    <form id="codeForm">
+      <input
+        id="codeInput"
+        class="code-input num"
+        type="text"
+        inputmode="numeric"
+        autocomplete="one-time-code"
+        placeholder="Enter club code"
+        required
+        autofocus
+      >
+      <button type="submit" class="btn btn-primary" id="codeSubmit" style="width:100%;margin-top:14px;padding:13px 16px;font-size:15px">
+        Unlock Club Squad →
+      </button>
+      <div id="gateErr" class="gate-err" hidden></div>
+    </form>
+    <div class="gate-foot">
+      <span>Need your club code? Ask the league admin.</span>
+      <a href="/">← League Hub</a>
+    </div>
+  </div>
+</main>
+
+<main id="portalView" class="wrap" hidden></main>
+
+<div id="toasts" aria-live="polite"></div>
+
+<dialog id="modal" class="modal">
+  <div class="modal-head">
+    <h3 id="modalTitle">Edit Player</h3>
+    <button type="button" class="btn-sm btn-ghost" id="modalClose" style="background:rgba(255,255,255,.15);color:#fff">✕</button>
+  </div>
+  <div class="modal-body" id="modalBody"></div>
+  <div class="modal-foot" id="modalFoot"></div>
+</dialog>
+
+<script type="module">
+import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.49.4';
+
+const db = createClient(
+  'https://qosxoojffswbzuvkotdk.supabase.co',
+  'sb_publishable_4LyPZQQUfW42Drxh3urfLQ_hPo-scHw'
+);
+
+const STORAGE_KEY = 'tsl_captain_code_v1';
+const $ = id => document.getElementById(id);
+const esc = x => String(x ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const DEFAULTS = [
+  {name:'Ochendo',c:'#8c2032',a:'#f5cf70',symbol:'crown'},
+  {name:'Navy Captain',c:'#10294d',a:'#e7c35c',symbol:'anchor'},
+  {name:'Onyema Ugochukwu',c:'#00693e',a:'#f5cf70',symbol:'eagle'},
+  {name:'Bro Ben',c:'#5a397e',a:'#e9e3f4',symbol:'bolt'},
+  {name:'Ndubuisi Kanu',c:'#b34d20',a:'#f9e4a6',symbol:'lion'}
+];
+
+const SYMBOLS = {
+  crown:'<path d="M24 39L20 22L35 31L45 16L55 31L70 22L66 39Z"/><path d="M24 45H66V50H24Z"/>',
+  anchor:'<circle cx="45" cy="21" r="7" fill="none" stroke="currentColor" stroke-width="5"/><path d="M42 29H48V58Q65 55 67 44L58 47L69 34L76 49L71 47Q67 66 45 69Q23 66 19 47L14 49L21 34L32 47L23 44Q25 55 42 58Z"/><path d="M31 34H59V39H31Z"/>',
+  eagle:'<path d="M45 32L13 18L22 42L39 50L32 61L45 56L58 61L51 50L68 42L77 18L49 32L49 25L56 20L43 19L39 26Z"/>',
+  bolt:'<path d="M49 12L24 45H43L36 72L68 34H49L58 12Z"/>',
+  lion:'<path d="M45 15L55 20L65 19L70 30L68 43L72 50L61 62L45 70L29 62L18 50L22 43L20 30L25 19L35 20Z"/><path d="M31 34L39 37M59 34L51 37M38 48L45 53L52 48M45 53V60" fill="none" stroke="#0b1e3c" stroke-width="4" stroke-linecap="round"/>',
+  star:'<path d="M45 13L54 35L78 37L60 53L65 76L45 64L25 76L30 53L12 37L36 35Z"/>'
+};
+
+const POSITIONS = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
+
+const state = {
+  code: null,
+  club: null,   // { team_id, team_name, locked, c, a, symbol }
+  players: [],  // players belonging to this club
+  showArchived: false,
+  busy: false
+};
+
+function toast(text, type='ok') {
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.textContent = text;
+  $('toasts').appendChild(el);
+  setTimeout(() => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(8px)';
+    setTimeout(() => el.remove(), 200);
+  }, 3200);
+}
+
+function openModal(title, bodyHtml, footHtml='') {
+  $('modalTitle').textContent = title;
+  $('modalBody').innerHTML = bodyHtml;
+  $('modalFoot').innerHTML = footHtml;
+  $('modal').showModal();
+}
+function closeModal() { if ($('modal').open) $('modal').close(); }
+$('modalClose').onclick = closeModal;
+$('modal').addEventListener('click', e => { if (e.target === $('modal')) closeModal(); });
+
+function crest(t) {
+  const initials = (t.team_name || t.name || 'TSL').split(/\s+/).map(x => x[0]).join('').slice(0,3).toUpperCase();
+  return `<svg viewBox="0 0 90 100" role="img" aria-label="${esc(t.team_name || t.name)}"><path d="M8 8H82V51Q82 78 45 94Q8 78 8 51Z" fill="${t.c}" stroke="${t.a}" stroke-width="4"/><path d="M15 15H75V51Q75 72 45 86Q15 72 15 51Z" fill="none" stroke="${t.a}" stroke-width="1" opacity=".7"/><g fill="${t.a}" color="${t.a}" transform="translate(9 4) scale(.8)">${SYMBOLS[t.symbol]||SYMBOLS.star}</g><path d="M12 64H78L72 76H18Z" fill="${t.a}"/><text x="45" y="73" text-anchor="middle" font-family="Arial" font-size="11" font-weight="900" fill="${t.c}">${esc(initials)}</text></svg>`;
+}
+
+async function captainRpc(action, payload={}) {
+  const {data, error} = await db.rpc('tsl_captain', {
+    code: state.code,
+    action,
+    payload
+  });
+  if (error) throw error;
+  return data;
+}
+
+async function loadClubPlayers() {
+  const {data, error} = await db
+    .from('tsl_players')
+    .select('*')
+    .eq('team_id', state.club.team_id)
+    .order('number', {ascending: true});
+  if (error) throw error;
+  state.players = data || [];
+}
+
+function enrichClub(info) {
+  const style = DEFAULTS.find(d => d.name === info.team_name)
+    || DEFAULTS[info.team_id - 1]
+    || {c:'#0b1e3c', a:'#e5bb45', symbol:'star'};
+  return {...style, ...info};
+}
+
+async function signInWithCode(rawCode, silent=false) {
+  const code = String(rawCode || '').trim();
+  if (!code) return false;
+  state.code = code;
+  try {
+    const info = await captainRpc('whoami');
+    state.club = enrichClub(info);
+    await loadClubPlayers();
+    try { sessionStorage.setItem(STORAGE_KEY, code); } catch (_) {}
+    $('gateErr').hidden = true;
+    $('gateView').hidden = true;
+    $('portalView').hidden = false;
+    $('signOutBtn').hidden = false;
+    $('syncWrap').hidden = false;
+    $('syncDot').className = 'sync-dot';
+    document.title = `${state.club.team_name} · TSL Captain Portal`;
+    renderPortal();
+    if (!silent) toast(`Signed in as ${state.club.team_name} Captain`);
+    return true;
+  } catch (err) {
+    state.code = null;
+    state.club = null;
+    try { sessionStorage.removeItem(STORAGE_KEY); } catch (_) {}
+    if (!silent) {
+      $('gateErr').textContent = err.message || 'Invalid authorization code';
+      $('gateErr').hidden = false;
+      $('codeInput').select();
+    }
+    return false;
+  }
+}
+
+function signOut() {
+  state.code = null;
+  state.club = null;
+  state.players = [];
+  state.showArchived = false;
+  try { sessionStorage.removeItem(STORAGE_KEY); } catch (_) {}
+  $('portalView').hidden = true;
+  $('portalView').innerHTML = '';
+  $('signOutBtn').hidden = true;
+  $('syncWrap').hidden = true;
+  $('gateView').hidden = false;
+  $('gateErr').hidden = true;
+  $('codeInput').value = '';
+  $('codeInput').focus();
+  document.title = 'TSL Captain Squad Portal';
+}
+
+$('signOutBtn').onclick = signOut;
+
+$('codeForm').onsubmit = async e => {
+  e.preventDefault();
+  const btn = $('codeSubmit');
+  btn.disabled = true;
+  btn.textContent = 'Checking code…';
+  await signInWithCode($('codeInput').value);
+  btn.disabled = false;
+  btn.textContent = 'Unlock Club Squad →';
+};
+
+function renderPortal(focusName=false) {
+  const c = state.club;
+  if (!c) return;
+
+  const activePlayers = state.players.filter(p => p.active !== false);
+  const archivedPlayers = state.players.filter(p => p.active === false);
+  const visiblePlayers = (state.showArchived ? state.players : activePlayers)
+    .slice()
+    .sort((a, b) => a.number - b.number);
+
+  const countPos = pos => activePlayers.filter(p => (p.position || '').toLowerCase() === pos.toLowerCase()).length;
+  const takenNums = state.players.slice().sort((a, b) => a.number - b.number);
+
+  $('portalView').innerHTML = `
+    <div class="club-hero" style="--club:${c.c};--club-a:${c.a}">
+      <div class="club-hero-left">
+        ${crest(c)}
+        <div>
+          <span class="eyebrow">Club Captain Workspace</span>
+          <h1>${esc(c.team_name)}</h1>
+          <p>Enrol your squad players. Changes sync directly to the league hub and match sheets.</p>
+        </div>
+      </div>
+      <div class="club-hero-right">
+        <span class="badge ${c.locked ? 'locked' : 'open'}">${c.locked ? '🔒 Enrolment Locked' : 'Enrolment Open'}</span>
+        <a href="/?club=${c.team_id}" target="_blank" rel="noopener" class="top-btn" style="font-size:12px">View Public Club Profile ↗</a>
+      </div>
+    </div>
+
+    ${c.locked ? `
+      <div class="lock-banner">
+        🔒 Squad enrolment for ${esc(c.team_name)} has been locked by the league administrator. You can still review your confirmed squad below.
+      </div>` : ''}
+
+    <div class="pos-strip">
+      <div class="pos-tile total"><span>Active Squad</span><strong class="num">${activePlayers.length}</strong></div>
+      <div class="pos-tile"><span>Goalkeepers</span><strong class="num">${countPos('Goalkeeper')}</strong></div>
+      <div class="pos-tile"><span>Defenders</span><strong class="num">${countPos('Defender')}</strong></div>
+      <div class="pos-tile"><span>Midfielders</span><strong class="num">${countPos('Midfielder')}</strong></div>
+      <div class="pos-tile"><span>Forwards</span><strong class="num">${countPos('Forward')}</strong></div>
+    </div>
+
+    ${!c.locked ? `
+      <div class="card">
+        <div class="card-head">
+          <h2>Enrol New Player</h2>
+          <span class="sub">Jersey numbers must be unique within ${esc(c.team_name)} (1–99)</span>
+        </div>
+        <form id="addPlayerForm" class="add-grid">
+          <label class="field">Full Name
+            <input id="pNameIn" name="name" type="text" placeholder="e.g. Chinedu Okafor" required autocomplete="off">
+          </label>
+          <label class="field">Jersey #
+            <input id="pNumIn" name="number" type="number" min="1" max="99" placeholder="1–99" required inputmode="numeric">
+            <span id="numHint" class="field-hint" hidden></span>
+          </label>
+          <label class="field">Position
+            <select name="position" required>
+              <option value="">— Select position —</option>
+              <option value="Goalkeeper">Goalkeeper (GK)</option>
+              <option value="Defender">Defender (DEF)</option>
+              <option value="Midfielder">Midfielder (MID)</option>
+              <option value="Forward">Forward (FWD)</option>
+            </select>
+          </label>
+          <div class="full" style="display:flex;justify-content:flex-end;margin-top:2px">
+            <button type="submit" class="btn btn-primary" id="addSubmitBtn">+ Enrol Player</button>
+          </div>
+        </form>
+        ${takenNums.length ? `
+          <div class="taken-bar">
+            <span style="font-weight:600">Taken jersey numbers:</span>
+            ${takenNums.map(p => `<span class="num-chip num ${p.active===false?'arch':''}" title="${esc(p.name)}${p.active===false?' (archived)':''}">#${p.number}</span>`).join('')}
+          </div>` : ''}
+      </div>` : ''}
+
+    <div class="card">
+      <div class="card-head">
+        <h2>${esc(c.team_name)} Squad (${visiblePlayers.length})</h2>
+        ${archivedPlayers.length ? `
+          <label style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer">
+            <input type="checkbox" id="toggleArch" ${state.showArchived?'checked':''} style="width:16px;height:16px">
+            Show archived (${archivedPlayers.length})
+          </label>` : ''}
+      </div>
+
+      ${visiblePlayers.length ? `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th class="left">Player</th>
+                <th>Position</th>
+                ${!c.locked ? '<th class="left">Actions</th>' : ''}
+              </tr>
+            </thead>
+            <tbody>
+              ${visiblePlayers.map(p => {
+                const arch = p.active === false;
+                return `
+                  <tr style="${arch ? 'opacity:.58;background:#fef2f2' : ''}">
+                    <td><span class="jersey num" style="background:${c.c}">${p.number}</span></td>
+                    <td class="left"><b>${esc(p.name)}</b>${arch ? ' <span class="badge archived">Archived</span>' : ''}</td>
+                    <td><span class="pos-pill">${esc(p.position || '—')}</span></td>
+                    ${!c.locked ? `
+                      <td class="left">
+                        <div style="display:flex;gap:6px">
+                          <button type="button" class="btn btn-sm btn-ghost" data-edit="${p.id}">Edit</button>
+                          <button type="button" class="btn btn-sm ${arch ? 'btn-primary' : 'btn-danger'}" data-arch="${p.id}" data-next="${arch ? 'true' : 'false'}">${arch ? 'Restore' : 'Archive'}</button>
+                        </div>
+                      </td>` : ''}
+                  </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>` : `
+        <p class="sub" style="text-align:center;padding:22px 0">
+          No players enrolled yet. Use the form above to add your first squad member.
+        </p>`}
+    </div>
+  `;
+
+  if ($('toggleArch')) {
+    $('toggleArch').onchange = e => {
+      state.showArchived = e.target.checked;
+      renderPortal();
+    };
+  }
+
+  if (!c.locked) {
+    const numInput = $('pNumIn');
+    const numHint = $('numHint');
+    numInput.oninput = () => {
+      const val = parseInt(numInput.value, 10);
+      if (!val) { numHint.hidden = true; return; }
+      const dup = state.players.find(p => p.number === val);
+      if (dup) {
+        numHint.hidden = false;
+        numHint.className = 'field-hint warn';
+        numHint.textContent = dup.active === false
+          ? `Used by archived player (${dup.name})`
+          : `Already assigned to ${dup.name}`;
+      } else if (val >= 1 && val <= 99) {
+        numHint.hidden = false;
+        numHint.className = 'field-hint ok';
+        numHint.textContent = 'Number available';
+      } else {
+        numHint.hidden = false;
+        numHint.className = 'field-hint warn';
+        numHint.textContent = 'Must be 1–99';
+      }
+    };
+
+    $('addPlayerForm').onsubmit = async e => {
+      e.preventDefault();
+      if (state.busy) return;
+      const o = Object.fromEntries(new FormData(e.target));
+      const dup = state.players.find(p => p.number === +o.number);
+      if (dup) {
+        toast(`Jersey #${o.number} is already assigned to ${dup.name}`, 'err');
+        return;
+      }
+      state.busy = true;
+      const btn = $('addSubmitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Enrolling…';
+      try {
+        const created = await captainRpc('player_add', o);
+        state.players.push(created);
+        toast(`${created.name} (#${created.number}) enrolled`);
+        renderPortal(true);
+      } catch (err) {
+        toast(err.message, 'err');
+        btn.disabled = false;
+        btn.textContent = '+ Enrol Player';
+      } finally {
+        state.busy = false;
+      }
+    };
+
+    document.querySelectorAll('[data-edit]').forEach(b => {
+      b.onclick = () => {
+        const p = state.players.find(x => x.id === b.dataset.edit);
+        if (!p) return;
+        const knownPos = POSITIONS.includes(p.position || '');
+        openModal(
+          `Edit Player · ${p.name}`,
+          `<form id="editForm" class="form-grid">
+            <label class="field full">Full Name
+              <input name="name" type="text" value="${esc(p.name)}" required>
+            </label>
+            <label class="field">Jersey #
+              <input name="number" type="number" min="1" max="99" value="${p.number}" required inputmode="numeric">
+            </label>
+            <label class="field">Position
+              <select name="position" required>
+                <option value="">— Select —</option>
+                ${POSITIONS.map(pos => `<option value="${pos}" ${p.position===pos?'selected':''}>${pos}</option>`).join('')}
+                ${!knownPos && p.position ? `<option value="${esc(p.position)}" selected>${esc(p.position)}</option>` : ''}
+              </select>
+            </label>
+          </form>`,
+          `<button type="button" class="btn btn-ghost" id="mCancel">Cancel</button>
+           <button type="submit" form="editForm" class="btn btn-primary" id="mSave">Save Changes</button>`
+        );
+        $('mCancel').onclick = closeModal;
+        $('editForm').onsubmit = async ev => {
+          ev.preventDefault();
+          const o = Object.fromEntries(new FormData(ev.target));
+          const dup = state.players.find(x => x.id !== p.id && x.number === +o.number);
+          if (dup) {
+            toast(`Jersey #${o.number} is already assigned to ${dup.name}`, 'err');
+            return;
+          }
+          $('mSave').disabled = true;
+          try {
+            const updated = await captainRpc('player_update', {id: p.id, ...o});
+            state.players = state.players.map(x => x.id === p.id ? updated : x);
+            closeModal();
+            toast(`Updated ${updated.name}`);
+            renderPortal();
+          } catch (err) {
+            toast(err.message, 'err');
+            $('mSave').disabled = false;
+          }
+        };
+      };
+    });
+
+    document.querySelectorAll('[data-arch]').forEach(b => {
+      b.onclick = async () => {
+        const id = b.dataset.arch;
+        const nextActive = b.dataset.next === 'true';
+        b.disabled = true;
+        try {
+          const updated = await captainRpc('player_archive', {id, active: nextActive});
+          state.players = state.players.map(x => x.id === id ? updated : x);
+          toast(nextActive ? `Restored ${updated.name}` : `Archived ${updated.name}`, 'info');
+          renderPortal();
+        } catch (err) {
+          toast(err.message, 'err');
+          b.disabled = false;
+        }
+      };
+    });
+
+    if (focusName && $('pNameIn')) $('pNameIn').focus();
+  }
+}
+
+/* Gentle background refresh (never interrupts active typing or open modal) */
+setInterval(async () => {
+  if (!state.code || !state.club || $('modal').open) return;
+  const activeTag = document.activeElement?.tagName;
+  const typing = activeTag === 'INPUT' || activeTag === 'SELECT';
+  try {
+    const info = await captainRpc('whoami');
+    const prevLocked = state.club.locked;
+    const prevSig = JSON.stringify(state.players);
+    state.club = enrichClub(info);
+    await loadClubPlayers();
+    $('syncDot').className = 'sync-dot';
+    if (!typing && (prevLocked !== state.club.locked || JSON.stringify(state.players) !== prevSig)) {
+      renderPortal();
+    }
+  } catch (err) {
+    $('syncDot').className = 'sync-dot err';
+    if (String(err.message || '').includes('Invalid authorization code')) {
+      toast('Your club code was changed by admin. Please sign in again.', 'err');
+      signOut();
+    }
+  }
+}, 10000);
+
+/* Boot: restore session if already entered */
+(async function boot() {
+  let saved = null;
+  try { saved = sessionStorage.getItem(STORAGE_KEY); } catch (_) {}
+  if (saved) {
+    await signInWithCode(saved, true);
+  }
+})();
+</script>
+</body>
+</html>
