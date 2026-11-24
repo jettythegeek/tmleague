@@ -590,10 +590,10 @@ const EVENT_META = {
 };
 
 const PERIOD_META = {
-  first_half:{label:'1st Half',regEnd:15},
-  second_half:{label:'2nd Half',regEnd:30},
-  extra_first:{label:'Extra Time · 1st',regEnd:35},
-  extra_second:{label:'Extra Time · 2nd',regEnd:40}
+  first_half:{label:'1st Half',regEnd:30},
+  second_half:{label:'2nd Half',regEnd:60},
+  extra_first:{label:'Extra Time · 1st',regEnd:70},
+  extra_second:{label:'Extra Time · 2nd',regEnd:80}
 };
 
 const ROLE_TITLES = {admin:'Super Administrator',referee:'Referee',supervisor:'Match Supervisor'};
@@ -837,9 +837,9 @@ function buildClockBannerHtml(m, canRef) {
 
           <div class="timer-period-row">
             <button type="button" class="t-chip ${lc.period==='first_half'?'active':''}" data-clk-period="first_half">1st Half (0')</button>
-            <button type="button" class="t-chip ${lc.period==='second_half'?'active':''}" data-clk-period="second_half">2nd Half (15')</button>
-            <button type="button" class="t-chip ${lc.period==='extra_first'?'active':''}" data-clk-period="extra_first">ET 1 (30')</button>
-            <button type="button" class="t-chip ${lc.period==='extra_second'?'active':''}" data-clk-period="extra_second">ET 2 (35')</button>
+            <button type="button" class="t-chip ${lc.period==='second_half'?'active':''}" data-clk-period="second_half">2nd Half (30')</button>
+            <button type="button" class="t-chip ${lc.period==='extra_first'?'active':''}" data-clk-period="extra_first">ET 1 (60')</button>
+            <button type="button" class="t-chip ${lc.period==='extra_second'?'active':''}" data-clk-period="extra_second">ET 2 (70')</button>
             <button type="button" class="t-chip" id="clkResetBtn"><i class="ph-bold ph-arrow-counter-clockwise" aria-hidden="true"></i> Reset</button>
           </div>
         </div>` : ''}
