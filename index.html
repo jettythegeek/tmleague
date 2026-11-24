@@ -1519,42 +1519,62 @@ function renderMatches(){
     : '<div class="panel empty">No fixtures to display yet.</div>';
 }
 
-/* Interactive Fan Poll (Persisted Locally) */
-const POLL_KEY='tsl_2026_fan_poll_v1';
-function getPollData(){
+/* Interactive Fan Poll (Live Shared Supabase Votes, starts at 0) */
+const POLL_PICK_KEY='tsl_2026_fan_pick_v2';
+let fanVotes={1:0,2:0,3:0,4:0,5:0};
+let pollBusy=false;
+function getSavedPick(){
   try{
-    const saved=JSON.parse(localStorage.getItem(POLL_KEY)||'null');
-    if(saved&&saved.votes)return saved;
-  }catch(_){}
-  const base={votes:{1:24,2:21,3:26,4:15,5:19},picked:null};
-  return base;
+    const v=Number(localStorage.getItem(POLL_PICK_KEY));
+    return Number.isInteger(v)&&v>0?v:null;
+  }catch(_){return null}
 }
 function renderPoll(){
-  const data=getPollData();
-  const total=Object.values(data.votes).reduce((a,b)=>a+b,0)||1;
-  document.getElementById('pollNote').textContent=data.picked
-    ? `You backed ${state.teams.find(t=>t.id===data.picked)?.name||'your club'} · Local fan poll`
-    : 'Tap your club to cast your fan prediction';
+  const pickedId=getSavedPick();
+  const total=state.teams.reduce((sum,t)=>sum+(fanVotes[t.id]||0),0);
+  document.getElementById('pollNote').textContent=pickedId
+    ? `You backed ${state.teams.find(t=>t.id===pickedId)?.name||'your club'} · ${total} total ${total===1?'vote':'votes'}`
+    : (total?`Tap your club to cast your fan prediction · ${total} ${total===1?'vote':'votes'}`:'0 votes so far · Tap your club to cast the first prediction!');
   document.getElementById('pollGrid').innerHTML=state.teams.map(t=>{
-    const count=data.votes[t.id]||0;
-    const pct=Math.round((count/total)*100);
-    const picked=data.picked===t.id;
+    const count=fanVotes[t.id]||0;
+    const pct=total?Math.round((count/total)*100):0;
+    const picked=pickedId===t.id;
     return `<button class="poll-opt ${picked?'picked':''}" type="button" onclick="castVote(${t.id})">
       ${crest(t)}
       <strong>${esc(t.name)}</strong>
       <div class="poll-bar"><div class="poll-fill" style="width:${pct}%"></div></div>
       <span class="poll-pct">${pct}%</span>
+      <span style="display:block;font-size:11px;color:#b8c7de;margin-top:2px">${count} ${count===1?'vote':'votes'}</span>
     </button>`;
   }).join('');
 }
-function castVote(teamId){
-  const data=getPollData();
-  if(data.picked&&data.votes[data.picked]>0)data.votes[data.picked]--;
-  data.picked=teamId;
-  data.votes[teamId]=(data.votes[teamId]||0)+1;
-  try{localStorage.setItem(POLL_KEY,JSON.stringify(data))}catch(_){}
+async function castVote(teamId){
+  if(pollBusy)return;
+  const prevPick=getSavedPick();
+  if(prevPick===teamId){
+    launchConfetti(state.teams.find(t=>t.id===teamId)?.c||'#e2b84a');
+    return;
+  }
+  pollBusy=true;
+  if(prevPick&&fanVotes[prevPick]>0)fanVotes[prevPick]--;
+  fanVotes[teamId]=(fanVotes[teamId]||0)+1;
+  try{localStorage.setItem(POLL_PICK_KEY,String(teamId))}catch(_){}
   renderPoll();
   launchConfetti(state.teams.find(t=>t.id===teamId)?.c||'#e2b84a');
+  try{
+    const r=await fetch(API+'rpc/tsl_cast_fan_vote',{
+      method:'POST',
+      headers:{apikey:KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({next_team_id:teamId,prev_team_id:prevPick})
+    });
+    if(r.ok){
+      const rows=await r.json();
+      if(Array.isArray(rows)){
+        fanVotes=Object.fromEntries(rows.map(x=>[x.team_id,x.votes]));
+        renderPoll();
+      }
+    }
+  }catch(_){}finally{pollBusy=false}
 }
 
 /* Visual Knockout Bracket */
@@ -1796,16 +1816,20 @@ async function readTable(t){
 }
 async function load(){
   try{
-    const [teams,matches,scores,players,stats,events,lineups]=await Promise.all(
-      ['teams','matches','scores','players','stats','events','lineups'].map(readTable)
-    );
-    const sig=JSON.stringify([teams,matches,scores,players,stats,events,lineups]);
+    const [teams,matches,scores,players,stats,events,lineups,votesRows]=await Promise.all([
+      ...['teams','matches','scores','players','stats','events','lineups'].map(readTable),
+      readTable('fan_votes').catch(()=>[])
+    ]);
+    const sig=JSON.stringify([teams,matches,scores,players,stats,events,lineups,votesRows]);
     document.getElementById('syncPill').classList.remove('offline');
     document.getElementById('sync').textContent='Live League Feed';
     if(sig!==lastDataSig){
       lastDataSig=sig;
       state.teams=teams.sort((a,b)=>a.id-b.id).map(t=>({...defaults.find(d=>d.name===t.name)||{c:'#176b76',a:'#e5d5a2',symbol:'star'},...t}));
       live={matches,scores,players,stats,events,lineups};
+      if(Array.isArray(votesRows)&&votesRows.length){
+        fanVotes=Object.fromEntries(votesRows.map(v=>[v.team_id,v.votes]));
+      }
       state.scores=Object.fromEntries(scores.filter(s=>s.status==='full_time').map(s=>[s.match_id,[s.home_score,s.away_score]]));
       render();
       renderClub();
