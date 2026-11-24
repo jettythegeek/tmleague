@@ -9,6 +9,9 @@
 <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css">
 <style>
 :root{
   --navy:#0b1e3c;
@@ -41,6 +44,22 @@ input:focus,select:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(11,3
 a{color:inherit}
 [hidden]{display:none!important}
 .num{font-variant-numeric:tabular-nums}
+.ph,.ph-bold,.ph-fill{display:inline-flex;align-items:center;justify-content:center;line-height:1;vertical-align:-0.12em;flex-shrink:0}
+.ev-ic{font-size:16px}
+.ev-ic.goal{color:var(--green-bright)}
+.ev-ic.assist{color:#2563eb}
+.ev-ic.card-y{color:#eab308;transform:rotate(90deg)}
+.ev-ic.card-r{color:#dc2626;transform:rotate(90deg)}
+.ev-ic.pen{color:var(--amber)}
+.ev-ic.og{color:var(--muted)}
+.ev-ic.sub-ic{color:var(--green-bright)}
+.kind-chip.selected .ev-ic,.status-pill.active-live .ph-fill,.status-pill.active-half_time .ph-fill,.status-pill.active-full_time .ph-bold{color:currentColor!important}
+.kind-chip,.status-pill,.timer-period,.t-chip,.pos-btn,.pos-live-pill,.m-pub,.lock-banner,.ev-info b{display:inline-flex;align-items:center;gap:6px}
+.lock-banner{display:flex;align-items:center;gap:10px}
+.ev-info b{flex-wrap:wrap}
+.card-head h3,.card-head h2{display:inline-flex;align-items:center;gap:8px}
+nav.side-nav button i{font-size:18px;flex-shrink:0}
+.mobile-nav button i{font-size:20px}
 
 /* Layout */
 .shell{min-height:100vh;display:flex}
@@ -445,7 +464,7 @@ dialog.modal::backdrop{background:rgba(8,22,44,.65);backdrop-filter:blur(3px)}
   <div class="m-right">
     <span class="sync-dot pulse" id="mSyncDot" title="Live sync"></span>
     <span class="m-role" id="mRole">…</span>
-    <a href="/" class="m-pub" target="_blank" rel="noopener">Site ↗</a>
+    <a href="/" class="m-pub" target="_blank" rel="noopener">Site <i class="ph-bold ph-arrow-up-right" aria-hidden="true"></i></a>
   </div>
 </div>
 
@@ -463,26 +482,26 @@ dialog.modal::backdrop{background:rgba(8,22,44,.65);backdrop-filter:blur(3px)}
 
     <nav class="side-nav" id="sideNav">
       <button data-nav="overview" class="active">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>
+        <i class="ph-bold ph-squares-four" aria-hidden="true"></i>
         Overview
       </button>
       <button data-nav="schedule">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        <i class="ph-bold ph-calendar-blank" aria-hidden="true"></i>
         Match Schedule
       </button>
       <button data-nav="standings" id="navStandings">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8M12 17v4M6 4h12v4a6 6 0 0 1-12 0V4Z"/><path d="M6 6H4a2 2 0 0 0 0 4h2M18 6h2a2 2 0 0 1 0 4h-2"/></svg>
+        <i class="ph-bold ph-trophy" aria-hidden="true"></i>
         Standings & Leaders
       </button>
       <button data-nav="clubs" id="navClubs" hidden>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <i class="ph-bold ph-users-three" aria-hidden="true"></i>
         Clubs & Players
       </button>
     </nav>
 
     <div class="side-footer">
       <div class="sync-pill"><span class="sync-dot pulse" id="syncDot"></span><span id="syncText">Connecting…</span></div>
-      <a href="/" class="public-link" target="_blank" rel="noopener">Open Public Site ↗</a>
+      <a href="/" class="public-link" target="_blank" rel="noopener">Open Public Site <i class="ph-bold ph-arrow-up-right" aria-hidden="true"></i></a>
     </div>
   </aside>
 
@@ -491,19 +510,19 @@ dialog.modal::backdrop{background:rgba(8,22,44,.65);backdrop-filter:blur(3px)}
 
 <nav class="mobile-nav" id="mobileNav" hidden>
   <button data-nav="overview" class="active">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>
+    <i class="ph-bold ph-squares-four" aria-hidden="true"></i>
     Overview
   </button>
   <button data-nav="schedule">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+    <i class="ph-bold ph-calendar-blank" aria-hidden="true"></i>
     Matches
   </button>
   <button data-nav="standings" id="mNavStandings">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8M12 17v4M6 4h12v4a6 6 0 0 1-12 0V4Z"/></svg>
+    <i class="ph-bold ph-trophy" aria-hidden="true"></i>
     Table
   </button>
   <button data-nav="clubs" id="mNavClubs" hidden>
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+    <i class="ph-bold ph-users-three" aria-hidden="true"></i>
     Squads
   </button>
 </nav>
@@ -514,7 +533,7 @@ dialog.modal::backdrop{background:rgba(8,22,44,.65);backdrop-filter:blur(3px)}
 <dialog id="modal" class="modal">
   <div class="modal-head">
     <h3 id="modalTitle">Dialog</h3>
-    <button type="button" class="btn-sm btn-ghost" id="modalClose" style="background:rgba(255,255,255,.15);color:#fff">✕</button>
+    <button type="button" class="btn-sm btn-ghost" id="modalClose" aria-label="Close dialog" style="background:rgba(255,255,255,.15);color:#fff;display:inline-flex;align-items:center;justify-content:center"><i class="ph-bold ph-x" aria-hidden="true"></i></button>
   </div>
   <div class="modal-body" id="modalBody"></div>
   <div class="modal-foot" id="modalFoot"></div>
@@ -561,13 +580,13 @@ const STAT_META = [
 ];
 
 const EVENT_META = {
-  goal:{icon:'⚽',label:'Goal'},
-  assist:{icon:'🎯',label:'Assist'},
-  yellow:{icon:'🟨',label:'Yellow Card'},
-  red:{icon:'🟥',label:'Red Card'},
-  penalty:{icon:'⚡',label:'Penalty Goal'},
-  own_goal:{icon:'🔄',label:'Own Goal'},
-  substitution:{icon:'🔁',label:'Sub'}
+  goal:{icon:'<i class="ph-fill ph-soccer-ball ev-ic goal" aria-hidden="true"></i>',label:'Goal'},
+  assist:{icon:'<i class="ph-bold ph-target ev-ic assist" aria-hidden="true"></i>',label:'Assist'},
+  yellow:{icon:'<i class="ph-fill ph-rectangle ev-ic card-y" aria-hidden="true"></i>',label:'Yellow Card'},
+  red:{icon:'<i class="ph-fill ph-rectangle ev-ic card-r" aria-hidden="true"></i>',label:'Red Card'},
+  penalty:{icon:'<i class="ph-fill ph-lightning ev-ic pen" aria-hidden="true"></i>',label:'Penalty Goal'},
+  own_goal:{icon:'<i class="ph-bold ph-arrows-clockwise ev-ic og" aria-hidden="true"></i>',label:'Own Goal'},
+  substitution:{icon:'<i class="ph-bold ph-arrows-left-right ev-ic sub-ic" aria-hidden="true"></i>',label:'Sub'}
 };
 
 const PERIOD_META = {
@@ -784,7 +803,7 @@ function buildClockBannerHtml(m, canRef) {
   return `
     <div class="timer-box">
       <div class="timer-top">
-        <span class="timer-period" id="clkPeriodLbl">⏱ ${esc(pm.label)}</span>
+        <span class="timer-period" id="clkPeriodLbl"><i class="ph-bold ph-timer" aria-hidden="true"></i> ${esc(pm.label)}</span>
         <span class="timer-state ${lc.running?'running':'paused'}" id="clkStateBadge">${lc.running?'Clock Running':'Clock Paused'}</span>
       </div>
 
@@ -798,7 +817,7 @@ function buildClockBannerHtml(m, canRef) {
         <div class="timer-controls">
           <div class="timer-main-row">
             <button type="button" class="btn timer-main-btn ${lc.running?'btn-amber':'btn-primary'}" id="clkToggleBtn">
-              ${lc.running ? '⏸ Pause Match Timer' : (lc.elapsedSec > 0 ? '▶ Continue Match Timer' : '▶ Start Match Timer')}
+              ${lc.running ? '<i class="ph-fill ph-pause" aria-hidden="true"></i> Pause Match Timer' : (lc.elapsedSec > 0 ? '<i class="ph-fill ph-play" aria-hidden="true"></i> Continue Match Timer' : '<i class="ph-fill ph-play" aria-hidden="true"></i> Start Match Timer')}
             </button>
             <button type="button" class="timer-adj-btn" data-clk-adj="-60" title="Subtract 1 minute">−1m</button>
             <button type="button" class="timer-adj-btn" data-clk-adj="60" title="Add 1 minute">+1m</button>
@@ -821,7 +840,7 @@ function buildClockBannerHtml(m, canRef) {
             <button type="button" class="t-chip ${lc.period==='second_half'?'active':''}" data-clk-period="second_half">2nd Half (15')</button>
             <button type="button" class="t-chip ${lc.period==='extra_first'?'active':''}" data-clk-period="extra_first">ET 1 (30')</button>
             <button type="button" class="t-chip ${lc.period==='extra_second'?'active':''}" data-clk-period="extra_second">ET 2 (35')</button>
-            <button type="button" class="t-chip" id="clkResetBtn">↺ Reset</button>
+            <button type="button" class="t-chip" id="clkResetBtn"><i class="ph-bold ph-arrow-counter-clockwise" aria-hidden="true"></i> Reset</button>
           </div>
         </div>` : ''}
     </div>`;
@@ -835,7 +854,7 @@ function updateClockDOM() {
   const inStoppage = lc.elapsedSec > regSec;
 
   $('clkDigits').textContent = fmtMMSS(lc.elapsedSec);
-  $('clkPeriodLbl').textContent = '⏱ ' + pm.label;
+  $('clkPeriodLbl').innerHTML = `<i class="ph-bold ph-timer" aria-hidden="true"></i> ${esc(pm.label)}`;
   $('clkStateBadge').className = 'timer-state ' + (lc.running ? 'running' : 'paused');
   $('clkStateBadge').textContent = lc.running ? 'Clock Running' : 'Clock Paused';
 
@@ -850,7 +869,7 @@ function updateClockDOM() {
   if ($('clkExtraVal')) $('clkExtraVal').textContent = `+${lc.added}'`;
   if ($('clkToggleBtn')) {
     $('clkToggleBtn').className = 'btn timer-main-btn ' + (lc.running ? 'btn-amber' : 'btn-primary');
-    $('clkToggleBtn').textContent = lc.running ? '⏸ Pause Match Timer' : (lc.elapsedSec > 0 ? '▶ Continue Match Timer' : '▶ Start Match Timer');
+    $('clkToggleBtn').innerHTML = lc.running ? '<i class="ph-fill ph-pause" aria-hidden="true"></i> Pause Match Timer' : (lc.elapsedSec > 0 ? '<i class="ph-fill ph-play" aria-hidden="true"></i> Continue Match Timer' : '<i class="ph-fill ph-play" aria-hidden="true"></i> Start Match Timer');
   }
   document.querySelectorAll('[data-clk-period]').forEach(b => b.classList.toggle('active', b.dataset.clkPeriod === lc.period));
   if ($('evUseClkBtn')) $('evUseClkBtn').textContent = `Use ${lc.elapsedSec > 0 ? lc.minute : 1}'`;
@@ -979,7 +998,7 @@ function matchRowHtml(m) {
       </div>
       <div class="m-actions">
         <button class="btn ${open?'btn-primary':'btn-ghost'}" data-open-match="${m.id}">
-          ${open ? 'Manage Match →' : 'View Details'}
+          ${open ? 'Manage Match <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>' : 'View Details'}
         </button>
       </div>
     </div>`;
@@ -1027,7 +1046,7 @@ function renderOverview() {
         </div>
         <div style="display:flex;justify-content:center;margin-top:16px">
           <button class="btn ${open?'btn-primary':'btn-navy'}" data-open-match="${m.id}" style="min-width:220px;width:min(100%,280px)">
-            ${open ? 'Open Match Control Centre →' : 'Inspect Match (Read-Only) →'}
+            ${open ? 'Open Match Control Centre <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>' : 'Inspect Match (Read-Only) <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>'}
           </button>
         </div>
       </div>`;
@@ -1080,7 +1099,7 @@ function renderOverview() {
       </div>
       <div class="kpi">
         <span>Discipline Logged</span>
-        <strong class="num">${yc} <span style="font-size:16px">🟨</span> · ${rc} <span style="font-size:16px">🟥</span></strong>
+        <strong class="num" style="display:inline-flex;align-items:center;gap:6px">${yc} <i class="ph-fill ph-rectangle ev-ic card-y" style="font-size:18px" aria-label="Yellow cards"></i> · ${rc} <i class="ph-fill ph-rectangle ev-ic card-r" style="font-size:18px" aria-label="Red cards"></i></strong>
         <small>${activeEvents.length} total match events</small>
       </div>
     </div>
@@ -1089,7 +1108,7 @@ function renderOverview() {
       <div class="card">
         <div class="card-head">
           <h2>Upcoming & Active Fixtures</h2>
-          <button class="btn btn-sm btn-ghost" id="goSchedule">View All 24 →</button>
+          <button class="btn btn-sm btn-ghost" id="goSchedule">View All 24 <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></button>
         </div>
         <div class="match-list">
           ${upcoming.length ? upcoming.map(matchRowHtml).join('') : '<p class="sub">All fixtures have been completed.</p>'}
@@ -1100,7 +1119,7 @@ function renderOverview() {
       <div class="card">
         <div class="card-head">
           <h2>League Table</h2>
-          <button class="btn btn-sm btn-ghost" id="goStandings">Full Table →</button>
+          <button class="btn btn-sm btn-ghost" id="goStandings">Full Table <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></button>
         </div>
         <div class="table-wrap">
           <table>
@@ -1218,11 +1237,11 @@ function renderStandings() {
 
     <div class="two-col">
       <div class="card">
-        <div class="card-head"><h3>⚽ Top Scorers</h3></div>
+        <div class="card-head"><h3><i class="ph-fill ph-soccer-ball ev-ic goal" aria-hidden="true"></i> Top Scorers</h3></div>
         ${topScorers.length ? `<div class="table-wrap"><table><thead><tr><th class="left">Player</th><th class="left">Club</th><th>Goals</th></tr></thead><tbody>${topScorers.map(p => `<tr><td class="left"><b>${esc(p.name)}</b></td><td class="left">${esc(tn(p.team_id))}</td><td class="pts-cell num">${p.goals}</td></tr>`).join('')}</tbody></table></div>` : '<p class="sub">No goals recorded yet.</p>'}
       </div>
       <div class="card">
-        <div class="card-head"><h3>🎯 Top Assists</h3></div>
+        <div class="card-head"><h3><i class="ph-bold ph-target ev-ic assist" aria-hidden="true"></i> Top Assists</h3></div>
         ${topAssists.length ? `<div class="table-wrap"><table><thead><tr><th class="left">Player</th><th class="left">Club</th><th>Assists</th></tr></thead><tbody>${topAssists.map(p => `<tr><td class="left"><b>${esc(p.name)}</b></td><td class="left">${esc(tn(p.team_id))}</td><td class="pts-cell num">${p.assists}</td></tr>`).join('')}</tbody></table></div>` : '<p class="sub">No assists recorded yet.</p>'}
       </div>
     </div>`;
@@ -1261,9 +1280,9 @@ function renderClubs() {
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button type="button" class="btn btn-sm btn-ghost" id="copyCapLink">Copy /captain Link</button>
-          <a href="/captain" target="_blank" rel="noopener" class="btn btn-sm btn-navy" style="text-decoration:none">Open Portal ↗</a>
+          <a href="/captain" target="_blank" rel="noopener" class="btn btn-sm btn-navy" style="text-decoration:none">Open Portal <i class="ph-bold ph-arrow-up-right" aria-hidden="true"></i></a>
           <button type="button" class="btn btn-sm ${anyUnlocked?'btn-danger':'btn-primary'}" id="toggleAllCapLock" data-next-lock="${anyUnlocked?'true':'false'}">
-            ${anyUnlocked ? '🔒 Lock All Clubs' : '🔓 Unlock All Clubs'}
+            ${anyUnlocked ? '<i class="ph-bold ph-lock" aria-hidden="true"></i> Lock All Clubs' : '<i class="ph-bold ph-lock-open" aria-hidden="true"></i> Unlock All Clubs'}
           </button>
         </div>
       </div>
@@ -1346,7 +1365,7 @@ function renderClubs() {
       ${filteredPlayers.length ? `
         <div class="table-wrap">
           <table>
-            <thead><tr><th>No.</th><th class="left">Player</th><th class="left">Club</th><th>Position</th><th>⚽</th><th>🎯</th><th>Cards</th><th class="left">Actions</th></tr></thead>
+            <thead><tr><th>No.</th><th class="left">Player</th><th class="left">Club</th><th>Position</th><th title="Goals"><i class="ph-fill ph-soccer-ball ev-ic goal" aria-label="Goals"></i></th><th title="Assists"><i class="ph-bold ph-target ev-ic assist" aria-label="Assists"></i></th><th>Cards</th><th class="left">Actions</th></tr></thead>
             <tbody>
               ${filteredPlayers.map(p => {
                 const t = teamById(p.team_id);
@@ -1362,7 +1381,7 @@ function renderClubs() {
                   <td>${esc(p.position||'—')}</td>
                   <td class="num">${g}</td>
                   <td class="num">${a}</td>
-                  <td class="num">${yc?yc+'🟨 ':''}${rc?rc+'🟥':''}${!yc&&!rc?'—':''}</td>
+                  <td class="num">${yc?`${yc}<i class="ph-fill ph-rectangle ev-ic card-y" style="font-size:14px;margin:0 4px 0 2px" aria-label="Yellow"></i>`:''}${rc?`${rc}<i class="ph-fill ph-rectangle ev-ic card-r" style="font-size:14px;margin-left:2px" aria-label="Red"></i>`:''}${!yc&&!rc?'—':''}</td>
                   <td class="left">
                     <div style="display:flex;gap:6px">
                       <button class="btn btn-sm btn-ghost" data-edit-player="${p.id}">Edit</button>
@@ -1542,26 +1561,26 @@ function renderMatchDetail() {
         <div class="stepper-box">
           <div class="st-name">${esc(tn(m.home))}</div>
           <div class="stepper-ctrl">
-            <button type="button" class="btn-ghost" id="hsMinus">−</button>
+            <button type="button" class="btn-ghost" id="hsMinus" aria-label="Decrease home score"><i class="ph-bold ph-minus" aria-hidden="true"></i></button>
             <span class="st-val num" id="hsVal">${d.home_score}</span>
-            <button type="button" class="btn-primary" id="hsPlus">+</button>
+            <button type="button" class="btn-primary" id="hsPlus" aria-label="Increase home score"><i class="ph-bold ph-plus" aria-hidden="true"></i></button>
           </div>
         </div>
         <div style="font-weight:900;color:var(--muted);font-size:18px">:</div>
         <div class="stepper-box">
           <div class="st-name">${esc(tn(m.away))}</div>
           <div class="stepper-ctrl">
-            <button type="button" class="btn-ghost" id="asMinus">−</button>
+            <button type="button" class="btn-ghost" id="asMinus" aria-label="Decrease away score"><i class="ph-bold ph-minus" aria-hidden="true"></i></button>
             <span class="st-val num" id="asVal">${d.away_score}</span>
-            <button type="button" class="btn-primary" id="asPlus">+</button>
+            <button type="button" class="btn-primary" id="asPlus" aria-label="Increase away score"><i class="ph-bold ph-plus" aria-hidden="true"></i></button>
           </div>
         </div>
       </div>
 
       <div class="status-pills" id="statusPills">
-        <button type="button" class="status-pill ${d.status==='live'?'active-live':''}" data-status="live">🔴 Live</button>
-        <button type="button" class="status-pill ${d.status==='half_time'?'active-half_time':''}" data-status="half_time">⏸ Half Time</button>
-        <button type="button" class="status-pill ${d.status==='full_time'?'active-full_time':''}" data-status="full_time">🏁 Full Time</button>
+        <button type="button" class="status-pill ${d.status==='live'?'active-live':''}" data-status="live"><i class="ph-fill ph-record" style="color:#dc2626" aria-hidden="true"></i> Live</button>
+        <button type="button" class="status-pill ${d.status==='half_time'?'active-half_time':''}" data-status="half_time"><i class="ph-fill ph-pause" aria-hidden="true"></i> Half Time</button>
+        <button type="button" class="status-pill ${d.status==='full_time'?'active-full_time':''}" data-status="full_time"><i class="ph-bold ph-flag-checkered" aria-hidden="true"></i> Full Time</button>
       </div>
 
       ${(isKnockout || d.home_penalties !== '' || d.away_penalties !== '') ? `
@@ -1654,9 +1673,9 @@ function renderMatchDetail() {
 
   $('app').innerHTML = `
     <div class="detail-topbar">
-      <button class="btn btn-ghost" id="backBtn">← Back to ${state.page==='overview'?'Overview':'Schedule'}</button>
+      <button class="btn btn-ghost" id="backBtn"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i> Back to ${state.page==='overview'?'Overview':'Schedule'}</button>
       <div style="display:flex;gap:8px;align-items:center">
-        ${state.role === 'admin' ? '<button class="btn btn-sm btn-ghost" id="editFixtureBtn">⚙ Edit Fixture</button>' : ''}
+        ${state.role === 'admin' ? '<button class="btn btn-sm btn-ghost" id="editFixtureBtn"><i class="ph-bold ph-gear-six" aria-hidden="true"></i> Edit Fixture</button>' : ''}
       </div>
     </div>
 
@@ -1677,7 +1696,7 @@ function renderMatchDetail() {
       ${buildClockBannerHtml(m, canRef)}
     </div>
 
-    ${!open ? `<div class="lock-banner">⏳ Match teams are not assigned yet — entry opens automatically once both knockout teams are confirmed.</div>` : ''}
+    ${!open ? `<div class="lock-banner"><i class="ph-bold ph-hourglass-medium" style="font-size:18px" aria-hidden="true"></i><span>Match teams are not assigned yet — entry opens automatically once both knockout teams are confirmed.</span></div>` : ''}
 
     <div class="control-grid">
       <div>
@@ -1909,14 +1928,14 @@ function buildPossessionHtml(m, canSup) {
   const lp = computeLivePossession();
   const s = scoreOf(m.id);
   const matchPaused = s && ['half_time','full_time'].includes(s.status);
-  const statusTxt = lp.side === 'home' ? `● ${tn(m.home)}`
-    : lp.side === 'away' ? `● ${tn(m.away)}`
-    : '⏸ Paused';
+  const statusHtml = lp.side === 'home' ? `<i class="ph-fill ph-record" style="font-size:11px" aria-hidden="true"></i> ${esc(tn(m.home))}`
+    : lp.side === 'away' ? `<i class="ph-fill ph-record" style="font-size:11px" aria-hidden="true"></i> ${esc(tn(m.away))}`
+    : '<i class="ph-fill ph-pause" aria-hidden="true"></i> Paused';
 
   return `
     <div class="pos-header num">
       <span style="color:${ht?.c||'var(--navy)'}" id="posHomePct">${lp.hasData ? lp.homePct + '%' : '—'}</span>
-      <span class="pos-live-pill ${lp.side!=='pause'?'running':''}" id="posLiveBadge">${esc(statusTxt)}</span>
+      <span class="pos-live-pill ${lp.side!=='pause'?'running':''}" id="posLiveBadge">${statusHtml}</span>
       <span style="color:${at?.c||'var(--gold)'}" id="posAwayPct">${lp.hasData ? lp.awayPct + '%' : '—'}</span>
     </div>
     <div class="pos-bar" style="--hc:${ht?.c||'#0b1e3c'};--ac:${at?.c||'#c39a26'}">
@@ -1931,7 +1950,7 @@ function buildPossessionHtml(m, canSup) {
       ${matchPaused ? '<p class="sub" style="margin-bottom:10px;color:#b45309;font-weight:600">Match is at Half Time / Full Time — set status to Live to resume possession tracking.</p>' : ''}
       <div class="pos-btns">
         <button type="button" class="pos-btn ${lp.side==='home'?'active':''}" style="--btn-c:${ht?.c||'#0b1e3c'}" data-pos="home" ${matchPaused?'disabled':''}>${esc(tn(m.home))}</button>
-        <button type="button" class="pos-btn pause-btn ${lp.side==='pause'?'active':''}" data-pos="pause">⏸ Pause</button>
+        <button type="button" class="pos-btn pause-btn ${lp.side==='pause'?'active':''}" data-pos="pause"><i class="ph-fill ph-pause" aria-hidden="true"></i> Pause</button>
         <button type="button" class="pos-btn ${lp.side==='away'?'active':''}" style="--btn-c:${at?.c||'#c39a26'}" data-pos="away" ${matchPaused?'disabled':''}>${esc(tn(m.away))}</button>
       </div>` : ''}`;
 }
@@ -1948,9 +1967,9 @@ function updatePossessionDOM() {
   $('posAwayTime').textContent = `${tn(m.away)}: ${fmtMMSS(lp.awaySec)}`;
   const badge = $('posLiveBadge');
   badge.className = 'pos-live-pill' + (lp.side !== 'pause' ? ' running' : '');
-  badge.textContent = lp.side === 'home' ? `● ${tn(m.home)}`
-    : lp.side === 'away' ? `● ${tn(m.away)}`
-    : '⏸ Paused';
+  badge.innerHTML = lp.side === 'home' ? `<i class="ph-fill ph-record" style="font-size:11px" aria-hidden="true"></i> ${esc(tn(m.home))}`
+    : lp.side === 'away' ? `<i class="ph-fill ph-record" style="font-size:11px" aria-hidden="true"></i> ${esc(tn(m.away))}`
+    : '<i class="ph-fill ph-pause" aria-hidden="true"></i> Paused';
   document.querySelectorAll('[data-pos]').forEach(b => b.classList.toggle('active', b.dataset.pos === lp.side));
 }
 
@@ -2011,7 +2030,7 @@ function buildStatRowsHtml(m, z, canSup) {
       <div class="stat-row" data-stat-row="${k}">
         <div class="stat-top">
           <div class="stat-ctrl home">
-            ${canSup ? `<button type="button" class="c-btn c-minus" data-counter="home:${k}:-1" ${hv===0?'disabled':''}>−</button>` : ''}
+            ${canSup ? `<button type="button" class="c-btn c-minus" data-counter="home:${k}:-1" aria-label="Decrease home ${label}" ${hv===0?'disabled':''}><i class="ph-bold ph-minus" aria-hidden="true"></i></button>` : ''}
             <span class="stat-val num" data-sv="home:${k}">${hv}</span>
             ${canSup ? `<button type="button" class="c-btn c-plus" data-counter="home:${k}:1">+1</button>` : ''}
           </div>
@@ -2019,7 +2038,7 @@ function buildStatRowsHtml(m, z, canSup) {
           <div class="stat-ctrl away">
             ${canSup ? `<button type="button" class="c-btn c-plus" data-counter="away:${k}:1">+1</button>` : ''}
             <span class="stat-val num" data-sv="away:${k}">${av}</span>
-            ${canSup ? `<button type="button" class="c-btn c-minus" data-counter="away:${k}:-1" ${av===0?'disabled':''}>−</button>` : ''}
+            ${canSup ? `<button type="button" class="c-btn c-minus" data-counter="away:${k}:-1" aria-label="Decrease away ${label}" ${av===0?'disabled':''}><i class="ph-bold ph-minus" aria-hidden="true"></i></button>` : ''}
           </div>
         </div>
         <div class="stat-mini-bar">
@@ -2081,7 +2100,7 @@ function bindStatCounterButtons(m, canSup) {
         } finally {
           state.pendingCounters = Math.max(0, state.pendingCounters - 1);
           if (state.pendingCounters === 0) {
-            if ($('statSyncHint')) $('statSyncHint').textContent = 'All stats synchronized ✓';
+            if ($('statSyncHint')) $('statSyncHint').innerHTML = 'All stats synchronized <i class="ph-bold ph-check-circle" style="color:var(--green-bright)" aria-hidden="true"></i>';
             if (state.selectedMatch === m.id) STAT_META.forEach(([k]) => updateStatRowDOM(m, k));
           }
         }

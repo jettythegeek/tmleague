@@ -26,6 +26,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;0,900;1,700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css">
 <style>
 :root{
   --bg:#060c18;
@@ -87,6 +90,17 @@ button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.ph,.ph-bold,.ph-fill{display:inline-flex;align-items:center;justify-content:center;line-height:1;vertical-align:-0.12em;flex-shrink:0}
+.ev-ic{font-size:16px}
+.ev-ic.goal{color:var(--emerald)}
+.ev-ic.assist{color:#3b82f6}
+.ev-ic.card-y{color:#eab308;transform:rotate(90deg)}
+.ev-ic.card-r{color:#dc2626;transform:rotate(90deg)}
+.ev-ic.pen{color:var(--gold)}
+.ev-ic.og{color:var(--muted)}
+.ev-ic.sub-ic{color:var(--emerald)}
+.theme-btn,.btn-gold,.spot-btn,.m-cta,.club-cta,.club-back,.season-tag,.trophy-tag,.m-score-tag,.ticker-live,.modal-close{display:inline-flex;align-items:center;gap:6px}
+.modal-close{justify-content:center;gap:0}
 
 /* Scroll Progress Line */
 .scroll-progress{
@@ -1007,7 +1021,7 @@ footer{
       <a href="#fixtures">Fixtures</a>
       <a href="#finals">Finals</a>
     </nav>
-    <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle night and daylight mode">☾ Night Mode</button>
+    <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle night and daylight mode"><i class="ph-bold ph-moon" aria-hidden="true"></i> Night Mode</button>
   </div>
 </header>
 
@@ -1021,11 +1035,11 @@ footer{
   </svg>
   <div class="wrap hero-grid">
     <div>
-      <div class="season-tag">★ The Estate · The Game · The Glory</div>
+      <div class="season-tag"><i class="ph-fill ph-star" aria-hidden="true"></i> The Estate · The Game · The Glory</div>
       <h1>ONE ESTATE.<br><span class="gold-shimmer">ONE LEAGUE.</span></h1>
       <p class="hero-lead">The official matchday hub for Trademore Super League. Follow live standings, club form, player statistics, and the knockout road to the championship.</p>
       <div class="hero-cta-row">
-        <a class="btn-gold" href="#fixtures">Explore Match Centre →</a>
+        <a class="btn-gold" href="#fixtures">Explore Match Centre <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
         <a class="btn-glass" href="#table">Live Standings</a>
       </div>
       <div class="hero-kpis">
@@ -1051,7 +1065,7 @@ footer{
         </div>
         <div class="spotlight-foot">
           <span id="spotDate">Loading matchday schedule…</span>
-          <button class="spot-btn" id="spotAction" type="button">Match Preview →</button>
+          <button class="spot-btn" id="spotAction" type="button">Match Preview <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></button>
         </div>
       </div>
     </div>
@@ -1329,7 +1343,7 @@ function matchCard(m){
   const isHT=st==='half_time';
   const isFT=st==='full_time'||(!!s&&!liveNow&&!isHT);
   const scoreCls=liveNow?'live':isHT?'ht':isFT?'played':'pending';
-  const tagText=liveNow?'● LIVE':isHT?'HALF TIME':isFT?'FULL TIME':'SCORE';
+  const tagText=liveNow?'<i class="ph-fill ph-record" style="font-size:10px" aria-hidden="true"></i> LIVE':isHT?'HALF TIME':isFT?'FULL TIME':'SCORE';
   const statusText=liveNow?'Live':isHT?'Half Time':isFT?'Full Time':'Scheduled';
   const pens=rec&&rec.home_penalties!=null&&rec.away_penalties!=null?`<span class="m-pens">(${rec.home_penalties}–${rec.away_penalties} pens)</span>`:'';
   return `<div class="match-card" style="--home-c:${h?h.c:'var(--border)'};--away-c:${v?v.c:'var(--border)'}" role="button" tabindex="0" onclick="showMatch(${m.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showMatch(${m.id})}">
@@ -1346,7 +1360,7 @@ function matchCard(m){
     <div class="m-team away"><span>${esc(v?.name||m.vn||'TBD')}</span>${crest(v)}</div>
     <div class="m-meta">
       <span>${esc(dateLabel(m))} · ${esc(statusText)}</span>
-      <span class="m-cta">Match Centre →</span>
+      <span class="m-cta">Match Centre <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></span>
     </div>
   </div>`;
 }
@@ -1359,7 +1373,7 @@ function renderTicker(allFixtures){
     const s=rec?[rec.home_score,rec.away_score]:result(m);
     const liveNow=isLiveRecord(rec);
     return `<button class="ticker-chip" type="button" onclick="showMatch(${m.id})">
-      ${liveNow?'<span class="ticker-live">● LIVE</span>':''}
+      ${liveNow?'<span class="ticker-live"><i class="ph-fill ph-record" style="font-size:9px" aria-hidden="true"></i> LIVE</span>':''}
       <span>${esc(h?.name||'TBD')}</span>
       <span class="ticker-score">${s?s.join('–'):'vs'}</span>
       <span>${esc(v?.name||'TBD')}</span>
@@ -1438,7 +1452,7 @@ function renderTeams(rows,playedCount){
       <div class="club-crest-wrap">${crest(t)}</div>
       <h3>${esc(t.name)}</h3>
       <div class="club-stat-strip">${r.pts} pts · ${r.w}W ${r.d}D ${r.l}L</div>
-      <span class="club-cta">Club Profile →</span>
+      <span class="club-cta">Club Profile <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></span>
     </a>`;
   }).join('');
 
@@ -1633,7 +1647,7 @@ function renderBracket(allFixtures){
         <div class="bracket-stage grand-final">
           <div class="panel-head">
             <div>
-              <div class="trophy-tag">★ Championship Decider</div>
+              <div class="trophy-tag"><i class="ph-fill ph-trophy" aria-hidden="true"></i> Championship Decider</div>
               <h3>Grand Final</h3>
             </div>
             <span class="sub">20 Dec 2026</span>
@@ -1685,7 +1699,15 @@ function showMatch(id,tab){
       })()
     : '<div class="empty">Match statistics have not been recorded yet.</div>';
 
-  const iconFor=k=>k==='goal'?'⚽':k==='assist'?'🎯':k==='yellow'?'🟨':k==='red'?'🟥':'•';
+  const iconFor=k=>({
+    goal:'<i class="ph-fill ph-soccer-ball ev-ic goal" aria-hidden="true"></i>',
+    assist:'<i class="ph-bold ph-target ev-ic assist" aria-hidden="true"></i>',
+    yellow:'<i class="ph-fill ph-rectangle ev-ic card-y" aria-hidden="true"></i>',
+    red:'<i class="ph-fill ph-rectangle ev-ic card-r" aria-hidden="true"></i>',
+    penalty:'<i class="ph-fill ph-lightning ev-ic pen" aria-hidden="true"></i>',
+    own_goal:'<i class="ph-bold ph-arrows-clockwise ev-ic og" aria-hidden="true"></i>',
+    substitution:'<i class="ph-bold ph-arrows-left-right ev-ic sub-ic" aria-hidden="true"></i>'
+  }[k]||'<i class="ph-fill ph-circle ev-ic" style="font-size:8px" aria-hidden="true"></i>');
   const timelineHtml=events.length
     ? events.map(e=>`<div class="event-item">
         <span class="event-min">${esc(e.minute??'—')}′</span>
@@ -1718,7 +1740,7 @@ function showMatch(id,tab){
     <div class="modal-hero" style="--home-c:${h?h.c:'#10294d'};--away-c:${v?v.c:'#00693e'}">
       <div class="modal-top">
         <span class="sub" style="color:#dbe7fa">${esc(dateLabel(m))}${sc?' · '+esc(sc.status.replaceAll('_',' ')):''}</span>
-        <button class="modal-close" type="button" aria-label="Close match centre" onclick="document.getElementById('detail').close()">✕</button>
+        <button class="modal-close" type="button" aria-label="Close match centre" onclick="document.getElementById('detail').close()"><i class="ph-bold ph-x" aria-hidden="true"></i></button>
       </div>
       <div class="modal-scoreboard">
         <div class="modal-team">${crest(h)}<strong>${esc(h?.name||m.hn||'TBD')}</strong></div>
@@ -1785,7 +1807,7 @@ function renderClub(){
   ];
   const all=[...fixtures(),...knockout()];
   clubPage.innerHTML=`
-    <a class="club-back" href="${esc(location.pathname)}#clubs">← Back to League Hub</a>
+    <a class="club-back" href="${esc(location.pathname)}#clubs"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i> Back to League Hub</a>
     <div class="club-hero-banner" style="--club:${t.c}">
       ${crest(t)}
       <div>
@@ -1935,7 +1957,7 @@ spySections.forEach(s=>spyObs.observe(s));
 const themeBtn=document.getElementById('themeToggle');
 function applyTheme(t,persist=true){
   document.documentElement.setAttribute('data-theme',t);
-  themeBtn.textContent=t==='night'?'☀ Daylight':'☾ Night Mode';
+  themeBtn.innerHTML=t==='night'?'<i class="ph-bold ph-sun" aria-hidden="true"></i> Daylight':'<i class="ph-bold ph-moon" aria-hidden="true"></i> Night Mode';
   if(persist){try{localStorage.setItem('tsl_theme_v2',t)}catch(_){}}
 }
 themeBtn.addEventListener('click',()=>applyTheme(document.documentElement.getAttribute('data-theme')==='night'?'day':'night',true));
