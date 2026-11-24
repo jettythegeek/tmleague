@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="night">
+<html lang="en" data-theme="day">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -988,7 +988,7 @@ footer{
       <a href="#fixtures">Fixtures</a>
       <a href="#finals">Finals</a>
     </nav>
-    <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle night and daylight mode">☀ Daylight</button>
+    <button class="theme-btn" id="themeToggle" type="button" aria-label="Toggle night and daylight mode">☾ Night Mode</button>
   </div>
 </header>
 
@@ -1890,13 +1890,13 @@ spySections.forEach(s=>spyObs.observe(s));
 
 /* Theme Toggle */
 const themeBtn=document.getElementById('themeToggle');
-function applyTheme(t){
+function applyTheme(t,persist=true){
   document.documentElement.setAttribute('data-theme',t);
   themeBtn.textContent=t==='night'?'☀ Daylight':'☾ Night Mode';
-  try{localStorage.setItem('tsl_theme',t)}catch(_){}
+  if(persist){try{localStorage.setItem('tsl_theme_v2',t)}catch(_){}}
 }
-themeBtn.addEventListener('click',()=>applyTheme(document.documentElement.getAttribute('data-theme')==='night'?'day':'night'));
-try{const savedTheme=localStorage.getItem('tsl_theme');if(savedTheme==='day'||savedTheme==='night')applyTheme(savedTheme);}catch(_){}
+themeBtn.addEventListener('click',()=>applyTheme(document.documentElement.getAttribute('data-theme')==='night'?'day':'night',true));
+try{const savedTheme=localStorage.getItem('tsl_theme_v2');applyTheme(savedTheme==='night'?'night':'day',false);}catch(_){applyTheme('day',false);}
 
 /* Close dialog when clicking backdrop */
 document.getElementById('detail').addEventListener('click',e=>{
