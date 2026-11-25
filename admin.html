@@ -597,6 +597,31 @@ const PERIOD_META = {
 };
 
 const ROLE_TITLES = {admin:'Super Administrator',referee:'Referee',supervisor:'Match Supervisor'};
+/* Keep the published 2026 format compatible with legacy Supabase fixture rows. */
+const SCHEDULE_KICKOFFS = {
+  1:'2026-11-27T16:00:00Z', 2:'2026-11-28T16:00:00Z', 3:'2026-11-29T16:00:00Z', 4:'2026-11-30T16:00:00Z',
+  5:'2026-12-02T16:00:00Z', 6:'2026-12-04T16:00:00Z', 7:'2026-12-05T16:00:00Z', 8:'2026-12-06T16:00:00Z',
+  9:'2026-12-07T16:00:00Z', 10:'2026-12-09T16:00:00Z', 21:'2026-12-11T16:00:00Z', 22:'2026-12-12T16:00:00Z',
+  23:'2026-12-19T16:00:00Z', 24:'2026-12-20T16:00:00Z'
+};
+const LEGACY_KICKOFFS = {
+  1:'2026-11-27T16:00:00Z', 2:'2026-11-28T16:00:00Z', 3:'2026-11-29T16:00:00Z', 4:'2026-11-30T16:00:00Z',
+  5:'2026-12-01T16:00:00Z', 6:'2026-12-02T16:00:00Z', 7:'2026-12-03T16:00:00Z', 8:'2026-12-04T16:00:00Z',
+  9:'2026-12-05T16:00:00Z', 10:'2026-12-06T16:00:00Z', 21:'2026-12-17T16:00:00Z', 22:'2026-12-18T16:00:00Z',
+  23:'2026-12-19T16:00:00Z', 24:'2026-12-20T16:00:00Z'
+};
+
+function currentSchedule(matches) {
+  return matches
+    .filter(m => Object.hasOwn(SCHEDULE_KICKOFFS, m.id))
+    .map(m => ({
+      ...m,
+      kickoff:new Date(m.kickoff).getTime() === new Date(LEGACY_KICKOFFS[m.id]).getTime()
+        ? SCHEDULE_KICKOFFS[m.id]
+        : m.kickoff
+    }))
+    .sort((a,b) => a.id - b.id);
+}
 
 const state = {
   role:null,
@@ -724,7 +749,7 @@ async function fetchAllData() {
     ...(DEFAULTS.find(d => d.name === t.name) || DEFAULTS[t.id - 1] || {c:'#176b76',a:'#e5d5a2',symbol:'star'}),
     ...t
   }));
-  state.matches = matches.sort((a,b) => a.id - b.id);
+  state.matches = currentSchedule(matches);
   state.players = players;
   state.scores = scores;
   state.stats = stats;
@@ -1108,7 +1133,7 @@ function renderOverview() {
       <div class="card">
         <div class="card-head">
           <h2>Upcoming & Active Fixtures</h2>
-          <button class="btn btn-sm btn-ghost" id="goSchedule">View All 24 <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></button>
+          <button class="btn btn-sm btn-ghost" id="goSchedule">View All ${state.matches.length} <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></button>
         </div>
         <div class="match-list">
           ${upcoming.length ? upcoming.map(matchRowHtml).join('') : '<p class="sub">All fixtures have been completed.</p>'}
@@ -1209,13 +1234,13 @@ function renderStandings() {
     <div class="hero">
       <span class="eyebrow">Live Tournament Table</span>
       <h1>Standings & Leaders</h1>
-      <p>Top 4 clubs after 20 league matches automatically advance to the semi-finals.</p>
+      <p>Top 4 clubs after ${state.matches.filter(m => m.stage === 'league').length} league matches automatically advance to the semi-finals.</p>
     </div>
 
     <div class="card">
       <div class="card-head">
         <h2>League Standings</h2>
-        <span class="sub num">${playedLeague} of 20 league matches completed</span>
+        <span class="sub num">${playedLeague} of ${state.matches.filter(m => m.stage === 'league').length} league matches completed</span>
       </div>
       <div class="table-wrap">
         <table>

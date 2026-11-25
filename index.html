@@ -1231,24 +1231,14 @@ let live={
     {"id":2,"stage":"league","kickoff":"2026-11-28T16:00:00Z","home":3,"away":4},
     {"id":3,"stage":"league","kickoff":"2026-11-29T16:00:00Z","home":5,"away":1},
     {"id":4,"stage":"league","kickoff":"2026-11-30T16:00:00Z","home":2,"away":3},
-    {"id":5,"stage":"league","kickoff":"2026-12-01T16:00:00Z","home":4,"away":5},
-    {"id":6,"stage":"league","kickoff":"2026-12-02T16:00:00Z","home":1,"away":3},
-    {"id":7,"stage":"league","kickoff":"2026-12-03T16:00:00Z","home":2,"away":4},
-    {"id":8,"stage":"league","kickoff":"2026-12-04T16:00:00Z","home":3,"away":5},
-    {"id":9,"stage":"league","kickoff":"2026-12-05T16:00:00Z","home":4,"away":1},
-    {"id":10,"stage":"league","kickoff":"2026-12-06T16:00:00Z","home":5,"away":2},
-    {"id":11,"stage":"league","kickoff":"2026-12-07T16:00:00Z","home":2,"away":1},
-    {"id":12,"stage":"league","kickoff":"2026-12-08T16:00:00Z","home":4,"away":3},
-    {"id":13,"stage":"league","kickoff":"2026-12-09T16:00:00Z","home":1,"away":5},
-    {"id":14,"stage":"league","kickoff":"2026-12-10T16:00:00Z","home":3,"away":2},
-    {"id":15,"stage":"league","kickoff":"2026-12-11T16:00:00Z","home":5,"away":4},
-    {"id":16,"stage":"league","kickoff":"2026-12-12T16:00:00Z","home":3,"away":1},
-    {"id":17,"stage":"league","kickoff":"2026-12-13T16:00:00Z","home":4,"away":2},
-    {"id":18,"stage":"league","kickoff":"2026-12-14T16:00:00Z","home":5,"away":3},
-    {"id":19,"stage":"league","kickoff":"2026-12-15T16:00:00Z","home":1,"away":4},
-    {"id":20,"stage":"league","kickoff":"2026-12-16T16:00:00Z","home":2,"away":5},
-    {"id":21,"stage":"semi_final","kickoff":"2026-12-17T16:00:00Z","home":null,"away":null},
-    {"id":22,"stage":"semi_final","kickoff":"2026-12-18T16:00:00Z","home":null,"away":null},
+    {"id":5,"stage":"league","kickoff":"2026-12-02T16:00:00Z","home":4,"away":5},
+    {"id":6,"stage":"league","kickoff":"2026-12-04T16:00:00Z","home":1,"away":3},
+    {"id":7,"stage":"league","kickoff":"2026-12-05T16:00:00Z","home":2,"away":4},
+    {"id":8,"stage":"league","kickoff":"2026-12-06T16:00:00Z","home":3,"away":5},
+    {"id":9,"stage":"league","kickoff":"2026-12-07T16:00:00Z","home":4,"away":1},
+    {"id":10,"stage":"league","kickoff":"2026-12-09T16:00:00Z","home":5,"away":2},
+    {"id":21,"stage":"semi_final","kickoff":"2026-12-11T16:00:00Z","home":null,"away":null},
+    {"id":22,"stage":"semi_final","kickoff":"2026-12-12T16:00:00Z","home":null,"away":null},
     {"id":23,"stage":"third_place","kickoff":"2026-12-19T16:00:00Z","home":null,"away":null},
     {"id":24,"stage":"final","kickoff":"2026-12-20T16:00:00Z","home":null,"away":null}
   ],
@@ -1850,6 +1840,25 @@ function render(){
 /* Supabase Live Feed */
 const API='https://qosxoojffswbzuvkotdk.supabase.co/rest/v1/';
 const KEY='sb_publishable_4LyPZQQUfW42Drxh3urfLQ_hPo-scHw';
+/* Keep the published 2026 format compatible with legacy Supabase fixture rows. */
+const SCHEDULE_KICKOFFS={
+  1:'2026-11-27T16:00:00Z',2:'2026-11-28T16:00:00Z',3:'2026-11-29T16:00:00Z',4:'2026-11-30T16:00:00Z',
+  5:'2026-12-02T16:00:00Z',6:'2026-12-04T16:00:00Z',7:'2026-12-05T16:00:00Z',8:'2026-12-06T16:00:00Z',
+  9:'2026-12-07T16:00:00Z',10:'2026-12-09T16:00:00Z',21:'2026-12-11T16:00:00Z',22:'2026-12-12T16:00:00Z',
+  23:'2026-12-19T16:00:00Z',24:'2026-12-20T16:00:00Z'
+};
+const LEGACY_KICKOFFS={
+  1:'2026-11-27T16:00:00Z',2:'2026-11-28T16:00:00Z',3:'2026-11-29T16:00:00Z',4:'2026-11-30T16:00:00Z',
+  5:'2026-12-01T16:00:00Z',6:'2026-12-02T16:00:00Z',7:'2026-12-03T16:00:00Z',8:'2026-12-04T16:00:00Z',
+  9:'2026-12-05T16:00:00Z',10:'2026-12-06T16:00:00Z',21:'2026-12-17T16:00:00Z',22:'2026-12-18T16:00:00Z',
+  23:'2026-12-19T16:00:00Z',24:'2026-12-20T16:00:00Z'
+};
+function currentSchedule(matches){
+  return matches
+    .filter(m=>Object.hasOwn(SCHEDULE_KICKOFFS,m.id))
+    .map(m=>({...m,kickoff:new Date(m.kickoff).getTime()===new Date(LEGACY_KICKOFFS[m.id]).getTime()?SCHEDULE_KICKOFFS[m.id]:m.kickoff}))
+    .sort((a,b)=>a.id-b.id);
+}
 async function readTable(t){
   const r=await fetch(API+'tsl_'+t+'?select=*',{headers:{apikey:KEY}});
   if(!r.ok)throw Error('Unable to load '+t);
@@ -1867,7 +1876,7 @@ async function load(){
     if(sig!==lastDataSig){
       lastDataSig=sig;
       state.teams=teams.sort((a,b)=>a.id-b.id).map(t=>({...defaults.find(d=>d.name===t.name)||{c:'#176b76',a:'#e5d5a2',symbol:'star'},...t}));
-      live={matches,scores,players,stats,events,lineups};
+      live={matches:currentSchedule(matches),scores,players,stats,events,lineups};
       if(Array.isArray(votesRows)&&votesRows.length){
         fanVotes=Object.fromEntries(votesRows.map(v=>[v.team_id,v.votes]));
       }
