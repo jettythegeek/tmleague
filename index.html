@@ -1044,7 +1044,7 @@ footer{
       </div>
       <div class="hero-kpis">
         <div class="kpi"><strong id="kpiTeams">5</strong><span>Clubs</span></div>
-        <div class="kpi"><strong id="kpiPlayed">0/20</strong><span>Matches Played</span></div>
+        <div class="kpi"><strong id="kpiPlayed">0/10</strong><span>Matches Played</span></div>
         <div class="kpi"><strong id="kpiGoals">0</strong><span>Goals Scored</span></div>
         <div class="kpi"><strong id="kpiStage">League</strong><span>Active Stage</span></div>
       </div>
@@ -1231,14 +1231,14 @@ let live={
     {"id":2,"stage":"league","kickoff":"2026-11-28T16:00:00Z","home":3,"away":4},
     {"id":3,"stage":"league","kickoff":"2026-11-29T16:00:00Z","home":5,"away":1},
     {"id":4,"stage":"league","kickoff":"2026-11-30T16:00:00Z","home":2,"away":3},
-    {"id":5,"stage":"league","kickoff":"2026-12-02T16:00:00Z","home":4,"away":5},
-    {"id":6,"stage":"league","kickoff":"2026-12-04T16:00:00Z","home":1,"away":3},
-    {"id":7,"stage":"league","kickoff":"2026-12-05T16:00:00Z","home":2,"away":4},
-    {"id":8,"stage":"league","kickoff":"2026-12-06T16:00:00Z","home":3,"away":5},
-    {"id":9,"stage":"league","kickoff":"2026-12-07T16:00:00Z","home":4,"away":1},
-    {"id":10,"stage":"league","kickoff":"2026-12-09T16:00:00Z","home":5,"away":2},
-    {"id":21,"stage":"semi_final","kickoff":"2026-12-11T16:00:00Z","home":null,"away":null},
-    {"id":22,"stage":"semi_final","kickoff":"2026-12-12T16:00:00Z","home":null,"away":null},
+    {"id":5,"stage":"league","kickoff":"2026-12-04T16:00:00Z","home":4,"away":5},
+    {"id":6,"stage":"league","kickoff":"2026-12-05T16:00:00Z","home":1,"away":3},
+    {"id":7,"stage":"league","kickoff":"2026-12-06T16:00:00Z","home":2,"away":4},
+    {"id":8,"stage":"league","kickoff":"2026-12-07T16:00:00Z","home":3,"away":5},
+    {"id":9,"stage":"league","kickoff":"2026-12-11T16:00:00Z","home":4,"away":1},
+    {"id":10,"stage":"league","kickoff":"2026-12-12T16:00:00Z","home":5,"away":2},
+    {"id":21,"stage":"semi_final","kickoff":"2026-12-13T16:00:00Z","home":null,"away":null},
+    {"id":22,"stage":"semi_final","kickoff":"2026-12-14T16:00:00Z","home":null,"away":null},
     {"id":23,"stage":"third_place","kickoff":"2026-12-19T16:00:00Z","home":null,"away":null},
     {"id":24,"stage":"final","kickoff":"2026-12-20T16:00:00Z","home":null,"away":null}
   ],
@@ -1606,6 +1606,7 @@ function renderBracket(allFixtures){
   const k=knockout();
   document.getElementById('knockstatus').textContent=played===allFixtures.length&&allFixtures.length?'Knockout stage active':'Awaiting league results';
   if(k.length<4){document.getElementById('bracket').innerHTML='';return;}
+  const koDate=(m,fallback)=>m?.date?new Date(m.date+'T12:00:00Z').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}):fallback;
 
   document.getElementById('bracket').innerHTML=`
     <div class="bracket-tree">
@@ -1630,7 +1631,7 @@ function renderBracket(allFixtures){
 
       <div class="bracket-col">
         <div class="bracket-stage">
-          <div class="panel-head"><h3>Third-Place Playoff</h3><span class="sub">19 Dec 2026 · Bronze Medal</span></div>
+          <div class="panel-head"><h3>Third-Place Playoff</h3><span class="sub">${esc(koDate(k[2],'19 Dec 2026'))} · Bronze Medal</span></div>
           ${matchCard(k[2])}
         </div>
 
@@ -1640,7 +1641,7 @@ function renderBracket(allFixtures){
               <div class="trophy-tag"><i class="ph-fill ph-trophy" aria-hidden="true"></i> Championship Decider</div>
               <h3>Grand Final</h3>
             </div>
-            <span class="sub">20 Dec 2026</span>
+            <span class="sub">${esc(koDate(k[3],'20 Dec 2026'))}</span>
           </div>
           ${matchCard(k[3])}
         </div>
@@ -1843,8 +1844,8 @@ const KEY='sb_publishable_4LyPZQQUfW42Drxh3urfLQ_hPo-scHw';
 /* Keep the published 2026 format compatible with legacy Supabase fixture rows. */
 const SCHEDULE_KICKOFFS={
   1:'2026-11-27T16:00:00Z',2:'2026-11-28T16:00:00Z',3:'2026-11-29T16:00:00Z',4:'2026-11-30T16:00:00Z',
-  5:'2026-12-02T16:00:00Z',6:'2026-12-04T16:00:00Z',7:'2026-12-05T16:00:00Z',8:'2026-12-06T16:00:00Z',
-  9:'2026-12-07T16:00:00Z',10:'2026-12-09T16:00:00Z',21:'2026-12-11T16:00:00Z',22:'2026-12-12T16:00:00Z',
+  5:'2026-12-04T16:00:00Z',6:'2026-12-05T16:00:00Z',7:'2026-12-06T16:00:00Z',8:'2026-12-07T16:00:00Z',
+  9:'2026-12-11T16:00:00Z',10:'2026-12-12T16:00:00Z',21:'2026-12-13T16:00:00Z',22:'2026-12-14T16:00:00Z',
   23:'2026-12-19T16:00:00Z',24:'2026-12-20T16:00:00Z'
 };
 const LEGACY_KICKOFFS={
